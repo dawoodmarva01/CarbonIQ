@@ -78,6 +78,21 @@ Deployment:
 5. Open leaderboard and reports.
 6. Test AI Coach interaction.
 
+## Testing Coverage
+
+The application includes automated tests covering:
+
+- Carbon footprint calculations
+- Category-wise emission tracking
+- Forecast validation
+- Sustainability score calculations
+- What-if simulation logic
+- Leaderboard validation
+- Receipt categorization
+- AI Coach response handling
+- Dashboard metrics validation
+- Emission reduction tracking
+  
 ## Known Limitations
 
 - Gemini API may temporarily use fallback mode due to quota limits.
