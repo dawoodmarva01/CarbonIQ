@@ -74,7 +74,7 @@ https://drive.google.com/drive/u/0/folders/1zscj90Qi1ysgZCKhy4SgjFqZkdKePemO
 
 ## 🎥 Demo
 
-Live Application: https://carbonemissioniq.vercel.app/login
+Live Application: https://carbonemissioniq.vercel.app/
 
 ## 📂 Source Code 
 https://github.com/dawoodmarva01/CarbonIQ
