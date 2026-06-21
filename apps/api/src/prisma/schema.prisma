@@ -1,0 +1,142 @@
+// CarbonIQ — Prisma schema
+// Run: npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  passwordHash  String
+  region        String   @default("IN")
+  householdSize Int      @default(1)
+  createdAt     DateTime @default(now())
+
+  activities    Activity[]
+  goals         Goal[]
+  forecasts     Forecast[]
+  chatMessages  ChatMessage[]
+  badges        UserBadge[]
+  offsets       OffsetPurchase[]
+  challenges    ChallengeParticipant[]
+}
+
+model Activity {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  category    String   // transport | food | energy | shopping | flights
+  subcategory String   // car_petrol | beef | electricity ...
+  source      String   // manual | receipt_ocr | bank_sync | voice
+  quantity    Float
+  unit        String   // km, kWh, kg, $
+  co2eKg      Float
+  rawInput    Json?
+  occurredAt  DateTime
+  createdAt   DateTime @default(now())
+
+  @@index([userId, occurredAt])
+  @@index([category])
+}
+
+model EmissionFactor {
+  id          String   @id @default(uuid())
+  category    String
+  subcategory String
+  region      String
+  factorValue Float    // kg CO2e per unit
+  unit        String
+  sourceApi   String   // climatiq | carbon_interface | static_fallback
+  lastSynced  DateTime @default(now())
+
+  @@unique([category, subcategory, region])
+}
+
+model Goal {
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id])
+  targetCo2eMonthly  Float
+  currentStreak      Int      @default(0)
+  createdAt          DateTime @default(now())
+}
+
+model Forecast {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  period          String   // "2026-07"
+  predictedCo2e   Float
+  confidenceLow   Float
+  confidenceHigh  Float
+  generatedAt     DateTime @default(now())
+
+  @@unique([userId, period])
+}
+
+model Badge {
+  id          String      @id @default(uuid())
+  name        String
+  description String
+  iconUrl     String?
+  users       UserBadge[]
+}
+
+model UserBadge {
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id])
+  earnedAt DateTime @default(now())
+
+  @@id([userId, badgeId])
+}
+
+model Challenge {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  regionScope  String   // neighborhood | org | global
+  startsAt     DateTime
+  endsAt       DateTime
+
+  participants ChallengeParticipant[]
+}
+
+model ChallengeParticipant {
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  co2eSaved   Float     @default(0)
+
+  @@id([challengeId, userId])
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  role      String   // user | assistant
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model OffsetPurchase {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  co2eOffsetKg Float
+  amountPaid   Float
+  provider     String   // cloverly_sandbox
+  purchasedAt  DateTime @default(now())
+}
