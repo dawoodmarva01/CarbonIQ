@@ -62,17 +62,14 @@ Deployment:
 - Render
 
 ## 📸 Screenshots
-
-(Add your best dashboard screenshots here)
+https://drive.google.com/drive/u/0/folders/1zscj90Qi1ysgZCKhy4SgjFqZkdKePemO
 
 ## 🎥 Demo
 
-Live Application:
-https://your-vercel-link.vercel.app
+Live Application: https://carbonemissioniq.vercel.app/login
 
-## 📂 Source Code
-
-https://github.com/yourusername/carboniq
+## 📂 Source Code 
+https://github.com/dawoodmarva01/CarbonIQ
 
 ## 🌱 Future Enhancements
 
