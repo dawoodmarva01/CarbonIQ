@@ -69,6 +69,21 @@ Deployment:
 - Vercel
 - Render
 
+## How to Test
+
+1. Open the live application.
+2. Login using demo credentials.
+3. View dashboard analytics.
+4. Try the what-if simulator.
+5. Open leaderboard and reports.
+6. Test AI Coach interaction.
+
+## Known Limitations
+
+- Gemini API may temporarily use fallback mode due to quota limits.
+- Emission values are estimated using predefined factors.
+- Forecasting accuracy improves with more user history.
+
 ## 📸 Screenshots
 https://drive.google.com/drive/u/0/folders/1zscj90Qi1ysgZCKhy4SgjFqZkdKePemO
 
