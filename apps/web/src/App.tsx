@@ -11,6 +11,11 @@ import { CoachChatPage } from "./pages/CoachChatPage";
 import { SimulatorPage } from "./pages/SimulatorPage";
 import { LeaderboardPage } from "./pages/LeaderboardPage";
 import { ReportCardPage } from "./pages/ReportCardPage";
+import { test, expect } from "vitest";
+
+test("basic test", () => {
+  expect(true).toBe(true);
+});
 
 export default function App() {
   const hydrate = useAuthStore((s) => s.hydrate);
