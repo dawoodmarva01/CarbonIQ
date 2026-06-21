@@ -7,7 +7,15 @@ CarbonIQ helps individuals understand, track, and reduce their environmental imp
 Many people want to live sustainably but lack visibility into how their daily activities contribute to carbon emissions. CarbonIQ bridges this gap by transforming everyday actions into measurable environmental impact and providing personalized guidance for reducing footprints.
 
 ## ✨ Key Features
-
+- Carbon Footprint Tracking
+- Sustainability Analytics Dashboard
+- Category-wise Emission Breakdown
+- Carbon Forecasting & Trend Analysis
+- What-If Simulation Engine
+- Sustainability Leaderboard
+- Receipt-Based Emission Tracking
+- AI Climate Coach Integration
+  
 ### 🤖 AI Climate Coach
 - Personalized sustainability guidance
 - Carbon reduction recommendations
