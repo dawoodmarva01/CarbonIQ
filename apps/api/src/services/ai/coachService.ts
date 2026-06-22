@@ -111,65 +111,65 @@ interface SimpleMessage {
   role: "user" | "assistant";
   content: string;
 }
-
 export async function chatWithCoach(
   userId: string,
   userMessage: string,
   history: SimpleMessage[] = []
 ) {
-  const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
-    systemInstruction: SYSTEM_PROMPT,
-    tools: [
-      {
-        functionDeclarations: TOOLS,
-      },
-    ],
-  });
+  try {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash",
+      systemInstruction: SYSTEM_PROMPT,
+      tools: [
+        {
+          functionDeclarations: TOOLS,
+        },
+      ],
+    });
 
-  const geminiHistory = history.map((message) => ({
-    role: message.role === "assistant" ? "model" : "user",
-    parts: [
-      {
-        text: message.content,
-      },
-    ],
-  }));
+    const geminiHistory = history.map((message) => ({
+      role: message.role === "assistant" ? "model" : "user",
+      parts: [{ text: message.content }],
+    }));
 
-  const chat = model.startChat({
-    history: geminiHistory,
-  });
+    const chat = model.startChat({
+      history: geminiHistory,
+    });
 
-  let result = await chat.sendMessage(userMessage);
+    let result = await chat.sendMessage(userMessage);
 
-  let rounds = 0;
+    let rounds = 0;
 
-  while (rounds < 3) {
-    const calls = result.response.functionCalls();
+    while (rounds < 3) {
+      const calls = result.response.functionCalls();
 
-    if (!calls || calls.length === 0) {
-      break;
+      if (!calls || calls.length === 0) {
+        break;
+      }
+
+      const responses = await Promise.all(
+        calls.map(async (call) => {
+          const toolResult = await executeTool(userId, call.name, call.args);
+
+          return {
+            functionResponse: {
+              name: call.name,
+              response: {
+                result: toolResult,
+              },
+            },
+          };
+        })
+      );
+
+      result = await chat.sendMessage(responses);
+      rounds++;
     }
 
-    const responses = await Promise.all(
-      calls.map(async (call) => {
-        const toolResult = await executeTool(userId, call.name, call.args);
+    return result.response.text() || "I couldn't generate a response.";
+  } catch (error: any) {
+    console.error("Gemini Coach Error:", error.message);
 
-        return {
-          functionResponse: {
-            name: call.name,
-            response: {
-              result: toolResult,
-            },
-          },
-        };
-      })
-    );
-
-    result = await chat.sendMessage(responses);
-    rounds++;
+    return "Demo mode: The AI Climate Coach is temporarily using fallback guidance due to AI quota/API limits. To reduce your footprint, start with high-impact habits such as using public transport, reducing electricity usage, choosing more plant-based meals, avoiding unnecessary purchases, and tracking your weekly CO₂ savings.";
   }
-
-  return result.response.text() || "I couldn't generate a response.";
 }
-
