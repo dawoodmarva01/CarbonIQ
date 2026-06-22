@@ -30,7 +30,7 @@ export async function createActivity(req: Request, res: Response) {
         quantity: Number(quantity),
         unit: unit ?? factorUsed.unit,
         co2eKg,
-        rawInput: { factorUsed },
+        rawInput: { factorUsed: factorUsed as any },
         occurredAt: occurredAt ? new Date(occurredAt) : new Date(),
       },
     });
@@ -100,7 +100,10 @@ export async function receiptScan(req: Request, res: Response) {
           quantity: item.quantity,
           unit: factorUsed.unit,
           co2eKg,
-          rawInput: { ocrLine: item.rawLine, factorUsed },
+          rawInput: {
+  ocrLine: item.rawLine,
+  factorUsed: factorUsed as any,
+},
           occurredAt: new Date(),
         },
       });
